@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Details App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Employee Details App</h2>
+
+    <form id="employeeForm">
+      <label for="employeeName">Employee Name:</label>
+      <input
+        type="text"
+        id="employeeName"
+        name="employeeName"
+        required
+        minlength="5"
+      />
+
+      <br />
+
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" name="dob" required />
+      <br />
+
+      <label>Gender:</label>
+      <input type="radio" id="male" name="gender" value="Male" required />
+      <label for="male">Male</label>
+      <input type="radio" id="female" name="gender" value="Female" required />
+      <label for="female">Female</label>
+      <br />
+
+      <label>Languages:</label>
+      <input type="checkbox" id="hindi" name="language" value="Hindi" />
+      <label for="hindi">Hindi</label>
+      <input type="checkbox" id="english" name="language" value="English" />
+      <label for="english">English</label>
+      <input type="checkbox" id="marathi" name="language" value="Marathi" />
+      <label for="marathi">Marathi</label>
+      <br />
+
+      <button type="button" onclick="addEmployee() ,showEmployeeDetails()">
+        Add Employee
+      </button>
+    </form>
+
+    <div id="employeeDetails"></div>
+
+    <script>
+      // Array to store employee details
+      const employees = [];
+
+      function addEmployee() {
+        // Retrieve form data
+        const employeeName = document.getElementById("employeeName").value;
+        const dob = document.getElementById("dob").value;
+        const gender = document.querySelector(
+          'input[name="gender"]:checked'
+        ).value;
+        //Checking for min lenght of Employee Name
+        if (employeeName.length < 5) {
+          alert("Employee Name must be at least 5 characters long.");
+          return; // Stop further execution if the condition is not met
+        }
+
+        // Retrieve selected languages
+        const languages = [];
+        document
+          .querySelectorAll('input[name="language"]:checked')
+          .forEach((language) => {
+            languages.push(language.value);
+          });
+
+        // Create employee object
+        const newEmployee = {
+          name: employeeName,
+          dateOfBirth: dob,
+          gender: gender,
+          languages: languages,
+        };
+
+        // Add employee to the array
+        employees.push(newEmployee);
+
+        // Clear form fields
+        document.getElementById("employeeName").value = "";
+        document.getElementById("dob").value = "";
+        document.querySelector('input[name="gender"]:checked').checked = false;
+        document
+          .querySelectorAll('input[name="language"]:checked')
+          .forEach((checkbox) => {
+            checkbox.checked = false;
+          });
+
+        alert("Employee added successfully!");
+      }
+      // Display employee details in a table
+      function showEmployeeDetails() {
+        let tableContent = `
+          <table>
+            <tr>
+              <th>Employee Name</th>
+              <th>Date of Birth</th>
+              <th>Gender</th>
+              <th>Languages</th>
+            </tr>
+        `;
+
+        employees.forEach((employee) => {
+          tableContent += `
+            <tr>
+              <td>${employee.name}</td>
+              <td>${employee.dateOfBirth}</td>
+              <td>${employee.gender}</td>
+              <td>${employee.languages.join(", ")}</td>
+            </tr>
+          `;
+        });
+
+        tableContent += `</table>`;
+
+        // Display the table in the 'employeeDetails' div
+        document.getElementById("employeeDetails").innerHTML = tableContent;
+      }
+    </script>
+  </body>
+</html>
